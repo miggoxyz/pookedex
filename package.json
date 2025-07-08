@@ -1,0 +1,29 @@
+{
+  "name": "pookedex",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "node dist/main.js",
+    "dev": "npx tsc && node dist/main.js",
+    "test": "vitest --run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miggoxyz/pookedex.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/miggoxyz/pookedex/issues"
+  },
+  "homepage": "https://github.com/miggoxyz/pookedex#readme",
+  "devDependencies": {
+    "@types/node": "^24.0.11",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}
