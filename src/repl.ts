@@ -1,42 +1,40 @@
-import { createInterface } from "readline";
-import { getCommands } from "./commands/commands.js";
+import { State } from "./state.js";
 
-// split input into words, based on whitespace, lowercase input, trim leading or trailing whitespace
+export function startREPL(state: State) {
+  state.readline.prompt();
+
+  state.readline.on("line", async (input) => {
+    const words = cleanInput(input);
+    if (words.length === 0) {
+      state.readline.prompt();
+      return;
+    }
+
+    const commandName = words[0];
+
+    const cmd = state.commands[commandName];
+    if (!cmd) {
+      console.log(
+        `Unknown command: "${commandName}". Type "help" for a list of commands.`
+      );
+      state.readline.prompt();
+      return;
+    }
+
+    try {
+      cmd.callback(state);
+    } catch (e) {
+      console.log(e);
+    }
+
+    state.readline.prompt();
+  });
+}
+
 export function cleanInput(input: string): string[] {
   return input
     .toLowerCase()
     .trim()
     .split(" ")
-    .filter((w) => w !== "");
-}
-
-export function startREPL() {
-  const rl = createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    prompt: "Pokedex > ",
-  });
-  rl.prompt();
-  rl.on("line", (input) => {
-    const i = cleanInput(input);
-    if (i.length === 0) {
-      rl.prompt();
-    }
-    const commandName = i[0];
-    const commands = getCommands();
-    const cmd = commands[commandName];
-    if (!cmd) {
-      console.log(
-        `Unknown command: "${commandName}". Type "help" for a list of commands.`
-      );
-      rl.prompt();
-      return;
-    }
-    try {
-      cmd.callback(commands);
-    } catch (e) {
-      console.log(e);
-    }
-    rl.prompt();
-  });
+    .filter((word) => word !== "");
 }
